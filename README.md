@@ -39,13 +39,15 @@ Three countries with real behaviour attached, not just labels:
 
 | | Helpline | Languages | Payment |
 | --- | --- | --- | --- |
-| Ethiopia | **952** | Amharic, Afaan Oromoo, Tigrinya, Somali, English | Telebirr, CBE, Awash |
+| Ethiopia | **8335** | Amharic, Afaan Oromoo, Tigrinya, Somali, English | Telebirr, CBE, Awash |
 | Kenya | **1190** | Kiswahili, English | M-Pesa |
 | Rwanda | **116** | Kinyarwanda, English, Français | MTN MoMo, Airtel Money |
 
-The header picker writes to `localStorage` (`lebona.region`) and drives:
+The header **country / language picker** (flag dropdown) writes to `localStorage` (`lebona.region`) and drives:
 
-- the helpline shown in the crisis bar on every page (number, country name and `tel:` href),
+- the helpline highlighted in the sticky crisis bar on every page, and the local helpline, payment
+  channels and verifying board shown on the home page,
+- which country tab opens first on the crisis page, and which listings sort first in the directory,
 - the language options offered in the intake form,
 - the payment channel named on the intake result screen.
 
@@ -58,19 +60,19 @@ mispronounce English text as Kinyarwanda.
 
 ## The intake form (`match.html`)
 
-Adapted from PHQ-4, GAD-7 and WHO-5 for manual operations. 15 screens:
+Adapted from PHQ-4, GAD-7 and WHO-5 for manual operations. Up to 21 screens, one question each:
 
 1. **Tier**, proactive self-growth / ongoing therapy / urgent. Choosing *urgent* inserts a
    crisis hard-stop screen with all three helplines before anything else.
 2. **Country**, decides the therapist pool, and rewrites the language question below it.
 3. **Primary area of focus**: six options.
-4. **Severity ×4**: the PHQ-4 items plus the self-harm question. Any non-zero answer to the
+4. **Severity ×5**: the four PHQ-4 items plus the self-harm question. Any non-zero answer to the
    last one stops auto-advance and surfaces your country's helpline inline.
 5. **Religion**, importance, then which religion, then whether you want religious-based
    therapy. Branching: answering *"Not important at all"* skips the next two entirely, and
    *"Prefer not to say"* skips the religious-therapy question. Changing an earlier answer
    clears the stale ones below it.
-6. **Matching preferences**, language, therapist gender, approach, previous therapy.
+6. **Matching preferences**, language (options depend on country), therapist gender, approach, previous therapy.
 7. **Logistics**, session format, contact channel (WhatsApp / Telegram / phone / email),
    best time of day.
 8. **Contact details**, with explicit consent that *a human coordinator will read this*.
@@ -95,9 +97,8 @@ assets/
   js/questionnaire.js   the intake form
   js/find-help.js       directory data + filtering
   js/tools.js           breathing, grounding, mood, journal, PHQ-4 screening
-  img/hero-scene.svg    full-bleed hero landscape
-  img/portrait.svg      editorial portrait
-  head.txt              shared <head> snippet for new pages
+  img/hero-scene.svg    full-bleed hero landscape (pale dawn)
+  img/portrait.svg      founder section illustration
 ```
 
 **Navigation lives in the `NAV` array in `assets/js/layout.js`**, change it once and every
@@ -105,24 +106,34 @@ page updates.
 
 ## Design
 
-- **Type**: Plus Jakarta Sans (display, 700/800) + Inter (body) + IBM Plex Mono (numerals).
-  Noto Sans Ethiopic is loaded for Amharic. **No italics anywhere.**
-- **No em dashes and no ALL-CAPS eyebrow labels** anywhere in the copy or the CSS. Both are
-  common tells of generated content; section labels are sentence case instead.
-- **Colour**: the site keeps its deep evergreen sections. The hero is the one light moment.
-  - `.on-dark` — evergreen gradient (`#16483D → #27735F`) with ochre and clay glow.
-  - `.band` — the CTA, same family with a stronger ochre wash.
-  - `.footer` / `.crisis-bar` — deepest evergreen.
-  - Tokens: evergreen `#1D5A4B` · clay `#C86A3C` · ochre `#DFA945` · sand `#FCF8F0`.
-- **CTA band**: the "You don't need a crisis" section above the footer is `.cta-band` —
-  full-bleed edge to edge, and light like the hero. The separate `.band` class stays dark
-  and is used only for the pull quote on the About page.
-- **Hero (light)**: `assets/img/hero-scene.svg` is a pale dawn — mint-to-cream sky, apricot
-  sun, sage hills. It sits under a *cream* scrim that fades to nothing on the right, and the
-  hero type is dark ink rather than white. This is deliberately the only light-background
-  hero on the site; every other section keeps the darker treatment.
+Updated after the 24 Sept 2026 design review. Calm, light and airy, with no dark sections.
+
+- **Colour** (tokens in `:root` of `lebona.css`):
+  - Soft mint `#E8F5E9` backgrounds with primary green `#2E7D32` for actions and accents.
+  - Warm cream `#FDFBF7` page background, white cards with subtle shadows.
+  - Sky `#E0F2FE` in gradients for the softer "on-dark" sections (the class name is kept for
+    compatibility, it is now a mint-to-sky wash with dark text).
+  - Soft terracotta / peach `#E07A5F` as decorative accent; a deeper `#A8452C` where it is text.
+  - Text is dark slate `#1E293B`, never pure black. Body and muted text all meet WCAG AA (4.5:1+).
+- **Type**: Plus Jakarta Sans for headings at 600/700 (no 800/900), Inter 400 for body.
+  Body text is 17px on desktop and 16px on phones. Headings use `text-wrap: balance`, and
+  `word-spacing: 0.05em` is set on the body. Noto Sans Ethiopic is loaded for Amharic.
+  **No italics anywhere.**
+- **Spacing**: major sections have 56px (phone) to 100px (desktop) of vertical padding.
+- **No scrolling tickers.** The home page uses static icon badges (4 languages, 48h response,
+  100% verified, free tools) instead.
+- **Hero** leads with instant value ("Instant access to free self-help tools · Personal matching
+  in 24–48 hrs"); the intake form length is only described inside the intake flow itself.
+- **Crisis access**: a slim sticky bar at the bottom of every page ("In crisis? Call 8335 (ET) |
+  1190 (KE) | 116 (RW)"), with the visitor's own country highlighted. Every helpline number on
+  the site is a `tel:` link.
+- **Crisis page**: hero states the action first ("Emergency help is available 24/7"), then
+  a country tab bar, with each country grouped into 1. mental health hotline, 2. specialised
+  services (ambulance, gender-based violence), 3. walk-in hospitals. Longer self-help and
+  supporter guidance sits in collapsible accordions under "Self-guided safety planning".
+- **No em dashes and no ALL-CAPS eyebrow labels** in copy or CSS.
 - Content is readable without JavaScript: the reveal animation is gated behind a `js` class
-  set in `<head>`, so a script failure degrades to a plain page rather than a blank one.
+  set in `<head>`, and on the crisis page all country panels show when scripts are off.
 
 ## Mobile
 
@@ -134,8 +145,8 @@ regressed on desktop.
 - **Inputs are 16px on small screens** so iOS Safari doesn't zoom the page on focus.
 - **Tap targets are >=44px** for every button, chip, filter row and screening option.
   Inline links inside sentences are left alone, as WCAG allows.
-- **The header keeps its "Get matched" button on phones** (compact, with the wordmark
-  tagline hidden) rather than dropping the primary action.
+- **The header keeps its "Get matched" button and country picker on phones** (compact, with
+  the wordmark tagline hidden) rather than dropping the primary action.
 - **Directory filters collapse** behind a "Filter results" toggle under 900px, so results
   aren't pushed below a long stack of checkboxes.
 - **Wide tables scroll** inside `.table-wrap`, with a "scroll sideways" hint that appears
@@ -159,9 +170,7 @@ Front-end only by design:
   Session Scheduled*.
 - **Verify every helpline number on `crisis.html` before publishing.** They are the highest-risk
   content on the site and are currently unverified placeholders.
-- Prices, therapist names, board-verification claims and statistics are placeholders.
+- Prices, therapist profiles (the directory shows clearly labelled sample listings), board-verification claims and statistics are placeholders.
 - Worksheet and starter-kit PDFs are listed but not attached.
 - Translations aren't wired up; coordinator outreach scripts in the four languages still need
   writing.
-#   l e b o n a  
- 
