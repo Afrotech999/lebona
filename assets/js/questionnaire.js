@@ -7,11 +7,11 @@
 
   // Mirrors COUNTRIES in layout.js (this page does not load layout.js).
   var COUNTRIES = {
-    ET: { name: 'Ethiopia', flag: '🇪🇹', helpline: '8335', emergency: '907', pay: 'Telebirr, CBE or Awash Bank',
+    ET: { name: 'Ethiopia', helpline: '8335', emergency: '907', pay: 'Telebirr, CBE or Awash Bank',
           langs: [['am', 'አማርኛ · Amharic'], ['om', 'Afaan Oromoo'], ['ti', 'ትግርኛ · Tigrinya'], ['en', 'English']] },
-    KE: { name: 'Kenya', flag: '🇰🇪', helpline: '1190', emergency: '999', pay: 'M-Pesa',
+    KE: { name: 'Kenya', helpline: '1190', emergency: '999', pay: 'M-Pesa',
           langs: [['sw', 'Kiswahili'], ['en', 'English']] },
-    RW: { name: 'Rwanda', flag: '🇷🇼', helpline: '116', emergency: '912', pay: 'MTN MoMo or Airtel Money',
+    RW: { name: 'Rwanda', helpline: '116', emergency: '912', pay: 'MTN MoMo or Airtel Money',
           langs: [['rw', 'Kinyarwanda'], ['en', 'English'], ['fr', 'Français']] }
   };
   var FREQ = [['0', 'Not at all'], ['1', 'Several days'], ['2', 'More than half the days'], ['3', 'Nearly every day']];
@@ -33,7 +33,7 @@
 
     { id: 'country', section: 'About you', title: 'Which country are you in?',
       help: 'This decides which pool of licensed psychologists your coordinator draws from, and how you pay.',
-      options: [['ET', 'Ethiopia', null, null, '🇪🇹'], ['KE', 'Kenya', null, null, '🇰🇪'], ['RW', 'Rwanda', null, null, '🇷🇼']] },
+      options: [['ET', 'Ethiopia'], ['KE', 'Kenya'], ['RW', 'Rwanda']] },
 
     { id: 'focus', section: 'About you', title: 'What would you most like support with?',
       help: 'Pick the closest one. You can say more to your coordinator later.',
@@ -126,7 +126,7 @@
     return '<div class="q-crisis">' + Object.keys(COUNTRIES).map(function (k) {
       var c = COUNTRIES[k];
       return '<a class="call-btn' + (k === cur ? ' is-current' : '') + '" href="tel:' + c.helpline + '">' +
-        '<span class="call-btn__flag">' + c.flag + '</span><span class="call-btn__txt"><span class="call-btn__sub">' + c.name + ' helpline</span>' +
+        '<span class="call-btn__txt"><span class="call-btn__sub">' + c.name + ' helpline</span>' +
         '<span class="call-btn__num">' + c.helpline + '</span></span><span class="call-btn__icon">' + callIcon + '</span></a>';
     }).join('') + '</div>' +
     '<p class="small muted mt-4">If someone is hurt, call emergency services: Ethiopia 907 · Kenya 999 · Rwanda 912, or go to the nearest hospital.</p>';
@@ -285,7 +285,7 @@
     bar.style.width = '100%';
     count.textContent = 'Complete';
     var rows = [
-      ['Country', c.flag + ' ' + c.name],
+      ['Country', c.name],
       ['Support with', labelFor(stepById('focus'), a.focus)],
       ['Language', labelFor(stepById('lang'), a.lang)],
       ['Therapist', labelFor(stepById('gender'), a.gender)],
